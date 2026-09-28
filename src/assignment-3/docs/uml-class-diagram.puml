@@ -1,0 +1,52 @@
+@startuml
+skinparam class {
+    BackgroundColor White
+    BorderColor Black
+    ArrowColor Black
+}
+
+title Assignment 3 - Windows OS Adapter and Bridge
+
+abstract class SystemNotice {
+    # outputChannel : OutputChannel
+    # code : String
+    + send() : String
+}
+
+class UpdateNotice {
+    + send() : String
+}
+
+class SecurityNotice {
+    + send() : String
+}
+
+interface OutputChannel {
+    + display(noticeType : String, code : String) : String
+}
+
+class ToastChannel {
+    + display(noticeType : String, code : String) : String
+}
+
+class EventLogChannel {
+    + display(noticeType : String, code : String) : String
+}
+
+class CommandPromptAdapter {
+    - legacyCommandPrompt : LegacyCommandPrompt
+    + display(noticeType : String, code : String) : String
+}
+
+class LegacyCommandPrompt {
+    + showLine(message : String, systemCode : String) : String
+}
+
+SystemNotice o-- OutputChannel
+UpdateNotice --|> SystemNotice
+SecurityNotice --|> SystemNotice
+ToastChannel ..|> OutputChannel
+EventLogChannel ..|> OutputChannel
+CommandPromptAdapter ..|> OutputChannel
+CommandPromptAdapter --> LegacyCommandPrompt
+@enduml
