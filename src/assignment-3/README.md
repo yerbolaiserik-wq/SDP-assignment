@@ -1,4 +1,5 @@
 # Assignment 3: Adapter and Bridge Patterns
+Aisyerik yerbol from SE-2536
 
 Topic: Operating System Windows
 
