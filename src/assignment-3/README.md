@@ -3,8 +3,6 @@ Aisyerik yerbol from SE-2536
 
 Topic: Operating System Windows
 
-This beginner-level project shows two design patterns:
-
 - Bridge Pattern separates a Windows notice from the way it is displayed.
 - Adapter Pattern connects an old Command Prompt tool to the new output interface.
 
