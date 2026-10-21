@@ -1,0 +1,88 @@
+@startuml
+title Flight Reservation (variant 8) - Strategy Pattern
+skinparam classAttributeIconSize 0
+skinparam shadowing false
+skinparam packageStyle rectangle
+hide empty members
+
+class Reservation <<record>> {
+  passengerId: String
+  distanceKm: double
+  daysBeforeDeparture: int
+  businessClass: boolean
+  bags: int
+  baggageKg: double
+}
+
+package "Fare family" {
+  interface FareStrategy {
+    +calculateFare(reservation: Reservation): double
+  }
+  class StandardFare
+  class LastMinuteFare
+  class LoyaltyFare
+  class FareCalculator <<context>> {
+    -strategy: FareStrategy
+    +setStrategy(strategy: FareStrategy)
+    +calculateFare(reservation: Reservation): double
+  }
+  class FareSelector <<selector>> {
+    +select(reservation: Reservation): FareStrategy
+    +forType(type: String): FareStrategy
+  }
+}
+
+package "Baggage family" {
+  interface BaggageStrategy {
+    +calculateFee(reservation: Reservation): double
+  }
+  class PieceBaggageFee
+  class WeightBaggageFee
+  class FlatBaggageFee
+  class BaggageRulesEngine <<context>> {
+    -strategy: BaggageStrategy
+    +setStrategy(strategy: BaggageStrategy)
+    +calculateFee(reservation: Reservation): double
+  }
+  class BaggageSelector <<selector>> {
+    +select(reservation: Reservation): BaggageStrategy
+  }
+}
+
+package "Isolation from change" {
+  interface LoyaltyProgram {
+    +getPoints(passengerId: String): int
+  }
+  class SimulatedLoyaltyProgram
+  class FakeLoyaltyProgram <<test>>
+}
+
+class FarePricer <<legacy>> {
+  {static} +price(type, reservation, loyaltyProgram): double
+}
+class Main
+
+FareStrategy <|.. StandardFare
+FareStrategy <|.. LastMinuteFare
+FareStrategy <|.. LoyaltyFare
+FareCalculator o--> FareStrategy
+FareSelector ..> FareStrategy : creates
+
+BaggageStrategy <|.. PieceBaggageFee
+BaggageStrategy <|.. WeightBaggageFee
+BaggageStrategy <|.. FlatBaggageFee
+BaggageRulesEngine o--> BaggageStrategy
+BaggageSelector ..> BaggageStrategy : creates
+
+LoyaltyProgram <|.. SimulatedLoyaltyProgram
+LoyaltyProgram <|.. FakeLoyaltyProgram
+LoyaltyFare --> LoyaltyProgram
+FareSelector --> LoyaltyProgram
+
+FarePricer ..> FareSelector
+FarePricer ..> FareCalculator
+Main ..> FareCalculator
+Main ..> BaggageRulesEngine
+Main ..> FareSelector
+Main ..> BaggageSelector
+@enduml
