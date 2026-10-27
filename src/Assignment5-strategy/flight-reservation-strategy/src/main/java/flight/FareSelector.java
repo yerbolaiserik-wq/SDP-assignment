@@ -1,6 +1,6 @@
 package flight;
 
-/** Picks a fare strategy. if/switch is allowed here because choosing is its job. */
+
 public class FareSelector {
     private final LoyaltyProgram loyaltyProgram;
 
@@ -8,7 +8,7 @@ public class FareSelector {
         this.loyaltyProgram = loyaltyProgram;
     }
 
-    /** Automatic choice: members with 1000+ points, then last-week reservations, else standard. */
+    
     public FareStrategy select(Reservation reservation) {
         if (loyaltyProgram.getPoints(reservation.passengerId()) >= 1000) {
             return new LoyaltyFare(loyaltyProgram);
