@@ -13,7 +13,7 @@ public class Main {
         Reservation reservation = new Reservation("Aigerim", 1000, 5, false, 2, 30);
         System.out.println("Passenger Aigerim: 1000 km flight in 5 days, economy, 2 bags (30 kg), 1500 points");
 
-        // Same input, all strategies of both families
+        
         System.out.println("\n=== 1. Price list for this trip ===");
         for (FareStrategy fare : List.of(new StandardFare(), new LastMinuteFare(), new LoyaltyFare(loyalty))) {
             System.out.println(name(fare) + ": " + money(fare.calculateFare(reservation)));
@@ -22,7 +22,7 @@ public class Main {
             System.out.println(name(fee) + ": " + money(fee.calculateFee(reservation)));
         }
 
-        // Manual choice vs automatic choice by the selectors
+        
         System.out.println("\n=== 2. Ticket agent's offer vs. system's best offer ===");
         FareCalculator fareCalculator = new FareCalculator(new StandardFare());
         System.out.println("Agent offers " + name(new StandardFare()) + ": " + money(fareCalculator.calculateFare(reservation)));
@@ -36,7 +36,7 @@ public class Main {
         baggageEngine.setStrategy(autoBaggage);
         System.out.println("System offers " + name(autoBaggage) + ": " + money(baggageEngine.calculateFee(reservation)));
 
-        // Switching strategies at runtime
+       
         System.out.println("\n=== 3. Price update: loyalty points expired ===");
         loyalty.setPoints("Aigerim", 0);
         FareStrategy newFare = fareSelector.select(reservation);
@@ -47,7 +47,7 @@ public class Main {
         System.out.println("Passenger buys the " + name(new FlatBaggageFee()) + " package: "
                 + money(baggageEngine.calculateFee(reservation)));
 
-        // Final reservation with the strategies the selectors choose
+        
         System.out.println("\n=== 4. Booking confirmation ===");
         fareCalculator.setStrategy(fareSelector.select(reservation));
         baggageEngine.setStrategy(baggageSelector.select(reservation));
